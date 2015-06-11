@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace T101Sharp
 {
 	public class NickNotes
-	{
+	{ 
 	}
 
 	public class Utils
@@ -15,6 +17,7 @@ namespace T101Sharp
 	public class ServerSettings
 	{
 		public string Server { get; set; }
+		public int Port { get; set; }
 		public bool useTLS { get; set; }
 		public string Nick { get; set; }
 		public List<string> DefaultChans { get; set; }
