@@ -41,17 +41,21 @@
       <HintPath>..\packages\CS-Script.3.9.10.0\lib\net45\Mono.CSharp.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Core\Irc.cs" />
+    <Compile Include="Core\PluginManager.cs" />
+    <Compile Include="plugins\base.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Model\" />
     <Folder Include="Core\" />
+    <Folder Include="plugins\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

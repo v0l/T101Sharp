@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Net;
 using System.IO;
 using System.Text;
@@ -9,39 +10,25 @@ namespace T101Sharp
 {
 	class MainClass
 	{
-		public static ServerSettings s ;
+		public static DynamicDictionary _s ;
 		public static Irc i;
+		public static PluginManager pl;
 
 		public static void Main (string[] args)
 		{
+			
 			LoadSettings();
 
-			if (s != null) {
-				i = new Irc (s.Server, s.Port, s.useTLS);
+			dynamic s = _s;
+
+			if (s != null && !string.IsNullOrEmpty(s.Server)) {
+				pl = new PluginManager ();
+				pl.LoadPlugins ();
+
+				i = new Irc (s.Server, (int)s.Port, s.useTLS);
 		
 				i.OnData += (Data d) => {
-					switch (d.type) {
-					case "NOTICE":
-						{
-							if (d.target == "Auth" && d.message.Contains ("*** Looking")) {
-								i.Nick (s.Nick);
-								i.User (s.Nick, s.Nick);
-							}
-							break;
-						}
-					case "PING":
-						{
-							i.Pong (d.message);
-							break;
-						}
-					case "376":
-						{
-							foreach (var c in s.DefaultChans) {
-								i.Join (c);
-							}
-							break;
-						}
-					}
+					pl.OnData(d);
 				};
 				i.Connect ();
 				i.ReadLoop ();
@@ -53,9 +40,16 @@ namespace T101Sharp
 
 		public static void LoadSettings(){
 			if (File.Exists ("options.conf")) {
-				using(FileStream fs = new FileStream("options.conf", FileMode.Open)){
-					using(StreamReader r = new StreamReader(fs)){
-						s = JsonConvert.DeserializeObject<ServerSettings> (r.ReadToEnd ());
+				using (FileStream fs = new FileStream ("options.conf", FileMode.Open)) {
+					using (StreamReader r = new StreamReader (fs)) {
+						_s = JsonConvert.DeserializeObject<DynamicDictionary> (r.ReadToEnd ());
+					}
+				}
+			} else {
+				using (FileStream fs = new FileStream ("options.conf",FileMode.Create, FileAccess.ReadWrite)) {
+					using (StreamWriter r = new StreamWriter (fs)) {
+						_s = new DynamicDictionary ();
+						r.Write (JsonConvert.SerializeObject (_s,Formatting.Indented));
 					}
 				}
 			}

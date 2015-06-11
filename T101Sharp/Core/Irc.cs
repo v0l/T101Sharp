@@ -65,6 +65,7 @@ namespace T101Sharp
 			}
 
 			if (!_s.Connected) {
+				Console.WriteLine (string.Format ("\nConnecting to: {0}\n", _hostname));
 				_s.BeginConnect (_rip, new AsyncCallback (_OnConnect), _s);
 			}
 		}
@@ -89,8 +90,6 @@ namespace T101Sharp
 				if(_useSSL){
 					_ss = new SslStream(_ns, false, new RemoteCertificateValidationCallback(ValidateCert), null);
 					_ss.BeginAuthenticateAsClient(_hostname, new AsyncCallback(_OnAuth), _ss);
-					_sr = new StreamReader(_ss);
-					_sw = new StreamWriter(_ss);
 				}else{
 					_sr = new StreamReader(_ns);
 					_sw = new StreamWriter(_ns);
@@ -176,6 +175,9 @@ namespace T101Sharp
 		private void _OnAuth(IAsyncResult ar){
 			_ss.EndAuthenticateAsClient (ar);
 
+			_sr = new StreamReader(_ss);
+			_sw = new StreamWriter(_ss);
+
 			if (OnAuth != null) {
 				OnAuth (_ss);
 			}
@@ -231,6 +233,10 @@ namespace T101Sharp
 
 		public void Pong(string m){
 			Write (string.Format ("PONG {0}\n", m));
+		}
+
+		public void Privmsg(string t, string m){
+			Write (string.Format ("PRIVMSG {0} :{1}\n",t, m));
 		}
 	}
 }
