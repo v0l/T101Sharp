@@ -49,7 +49,6 @@
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Core\Irc.cs" />
     <Compile Include="Core\PluginManager.cs" />
-    <Compile Include="plugins\base.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -59,5 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="plugins\base.cs" />
+    <None Include="plugins\News.cs" />
   </ItemGroup>
 </Project>

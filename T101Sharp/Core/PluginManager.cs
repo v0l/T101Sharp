@@ -23,7 +23,12 @@ namespace T101Sharp
 					foreach (var f in Directory.EnumerateFiles("plugins/","*.cs")) {
 						try {
 							IPlugin n = CSScript.Evaluator.LoadFile<IPlugin> (f);
+
+							n.irc = MainClass.i;
+							n.setting = MainClass._s;
+
 							_plugins.Add (n);
+							n.Init();
 							Console.WriteLine (string.Format ("Plugin loaded: {0}", f));
 						} catch (Exception ex) {
 							#if DEBUG
@@ -57,6 +62,9 @@ namespace T101Sharp
 	{
 		Irc irc { get; set; }
 		dynamic setting { get; set; }
+
+		void Init();
+		string GetHelp();
 		void OnData(Data d);
 	}
 }

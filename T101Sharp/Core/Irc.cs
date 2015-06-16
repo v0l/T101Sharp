@@ -238,6 +238,14 @@ namespace T101Sharp
 		public void Privmsg(string t, string m){
 			Write (string.Format ("PRIVMSG {0} :{1}\n",t, m));
 		}
+
+		public void Notice(string t, string m){
+			Write (string.Format ("NOTICE {0} :{1}\n",t, m));
+		}
+
+		public void Oper(string u, string p){
+			Write (string.Format ("OPER {0} {1}\n",u, p));
+		}
 	}
 }
 
